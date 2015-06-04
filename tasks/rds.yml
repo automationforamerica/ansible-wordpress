@@ -1,0 +1,35 @@
+---
+- name: Spin up RDS instance
+  rds:
+    command: create
+    instance_name: "{{ wp_rds_instance_name }}"
+    db_engine: "{{ wp_rds_database_engine }}"
+    size: "{{ wp_db_size_in_gb }}"
+    instance_type: "{{ wp_rds_instance_type }}"
+    db_name: "{{ wp_db_name }}"
+    username: "{{ wp_db_user }}"
+    password: "{{ wp_db_password }}"
+    region: "{{ ansible_ec2_placement_region }}"
+    subnet: "{{ wp_network_subnet_group }}"
+    vpc_security_groups: "{{ sg.group_id }}"
+    multi_zone: "{{ wp_db_multi_zone }}"
+    backup_retention: "{{ wp_db_backup_retention }}"
+    publicly_accessible: "{{ wp_db_publicaly_accessible }}"
+    upgrade: "{{ wp_db_automatically_upgrade }}"
+    wait: yes
+    wait_timeout: 1200
+
+- name: Spin up RDS replicator
+  rds:
+    command: replicate
+    instance_name: "{{ wp_rds_instance_name }}-read"
+    source_instance: "{{ wp_rds_instance_name }}"
+    region: "{{ ansible_ec2_placement_region }}"
+    wait: No
+
+- name: Collect RDS facts
+  rds:
+    command: facts
+    instance_name: "{{ wp_rds_instance_name }}"
+    region: "{{ ansible_ec2_placement_region }}"
+  register: wordpress_rds_facts

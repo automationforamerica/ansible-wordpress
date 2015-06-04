@@ -1,0 +1,32 @@
+---
+- name: Ensure that private key is uploaded so that replication works
+  template:
+    src: wordpress_replication_key
+    dest: "/home/{{ replication_username }}/.ssh/wordpress_replication"
+- name: Change permissions on key file
+  file:
+    path: "/home/{{ replication_username }}/.ssh/wordpress_replication"
+    state: file
+    owner: "{{ replication_username }}"
+    mode: 0600
+- name: Modify SSH configuration
+  synchronize:
+    src=ssh_config
+    dest="/home/{{ replication_username }}/.ssh/config"
+    archive=no
+- name: Change permissions on SSH configuration
+  file:
+    path: "/home/{{ replication_username }}/.ssh/config"
+    state: file
+    owner: "{{ replication_username }}"
+    mode: 0600
+
+- name: Replicate Wordpress directory to www servers
+  sudo_user: "{{ replication_username }}"
+  sudo: True
+  cron: >
+    name="Replicate Wordpress to {{ item }}"
+    minute="*"
+    hour="*"
+    job="scp -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}{{ wp_deployment_current_directory }} {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
+  with_items: "{{ groups['tag_Role_Wordpress'] }}"

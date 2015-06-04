@@ -1,0 +1,51 @@
+---
+wp_version: 3.7
+replication_username: wordpress
+download_wordpress: False
+
+internal_dns_hostname_prefix: ""
+
+wp_db_name: wordpress
+wp_db_user: wordpress
+wp_db_password: secret
+mysql_port: 3306
+server_hostname: localhost
+auto_up_disable: False
+core_update_level: True
+
+auth_key:
+secure_auth_key:
+logged_in_key:
+nonce_key:
+auth_salt:
+secure_auth_salt:
+logged_in_salt:
+nonce_salt:
+
+nginx_sites:
+  wordpress:
+    - "listen *:{{ reverse_proxy_port }}"
+    - root /srv/wordpress/current/
+    - index index.php index.html index.htm
+    - location / {
+        try_files $uri $uri/ /index.php?$args;
+      }
+    - location ~* \.(gif|jpg|png|css|js)$ {
+        expires max;
+      }
+    - location ~ \.php$ {
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php-fpm/wordpress.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      }
+    - location /wp-admin {
+        allow {{ internal_network_cidr }};
+        deny all;
+      }
+    - location /elb-status {
+        access_log off;
+        return 200;
+      }

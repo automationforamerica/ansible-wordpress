@@ -1,0 +1,2 @@
+Host {{ internal_dns_hostname_prefix }}*
+  IdentityFile ~/.ssh/wordpress_replication

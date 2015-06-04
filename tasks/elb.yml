@@ -1,0 +1,38 @@
+---
+- name: Create a load balancer
+  sudo: False
+  ignore_errors: Yes
+  local_action:
+    module: ec2_elb_lb
+    name: "{{ wp_lb_name }}"
+    state: present
+    connection_draining_timeout: "{{ wp_lb_connection_draining_timeout }}"
+    region: "{{ ansible_ec2_placement_region }}"
+    subnets: "{{ wp_network_subnets | join(',') }}"
+    security_group_ids: "{{ lb_sg.group_id }}"
+    scheme: internet-facing
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+    health_check:
+      ping_protocol: http
+      ping_port: 80
+      ping_path: "/elb-status"
+      response_timeout: 10
+      interval: 30
+      unhealthy_threshold: 2
+      healthy_threshold: 10
+  register: load_balancer_info
+
+- name: Register DNS for the load balancer
+  ignore_errors: Yes
+  route53: >
+    command=create
+    zone="{{ fqdn_zone }}"
+    record="{{ wp_dns }}{{ fqdn }}"
+    type=CNAME
+    ttl=7200
+    value="{{ load_balancer_info.elb.dns_name }}"
+    overwrite=true
+    retry_interval=10

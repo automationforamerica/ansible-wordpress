@@ -1,0 +1,29 @@
+---
+- name: Download latest Wordpress build
+  s3: >
+    bucket="{{ wp_deployment_bucket }}"
+    object="{{ wp_deployment_file_key }}"
+    dest=/tmp/wordpress.tar.gz
+    mode=get
+
+- name: Extract Wordpress
+  unarchive: >
+    src=/tmp/wordpress.tar.gz
+    dest="{{ wp_deployment_directory }}"
+    copy=no
+
+- name: Copy WordPress config file
+  template:
+    src: wp-config.php
+    dest: "{{ wp_deployment_directory }}"
+
+- name: Change permissions on WordPress config file
+  file: >
+    path="{{ wp_deployment_directory }}wp-config.php"
+    owner="{{ replication_username }}"
+
+- name: Manually replicate Wordpress
+  sudo_user: "{{ replication_username }}"
+  sudo: Yes
+  shell: "scp -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}{{ wp_deployment_current_directory }} {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
+  with_items: "{{ groups['tag_Role_Wordpress'] }}"

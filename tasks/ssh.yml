@@ -1,0 +1,11 @@
+---
+- name: Ensure that user SSH directory exists
+  file:
+    path: "/home/{{ replication_username }}/.ssh"
+    state: directory
+    mode: 0755
+
+- name: Upload public key
+  template:
+    src: wordpress_replication_public_key
+    dest: "/home/{{ replication_username }}/.ssh/wordpress_replication.pub"
