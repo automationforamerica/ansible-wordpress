@@ -22,6 +22,9 @@ secure_auth_salt:
 logged_in_salt:
 nonce_salt:
 
+wp_pre_config_filename: False
+wp_post_config_filename: False
+
 nginx_sites:
   wordpress:
     - "listen *:{{ reverse_proxy_port }}"

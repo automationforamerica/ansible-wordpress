@@ -14,6 +14,10 @@
  * @package WordPress
  */
 
+{% if wp_pre_config_filename is defined %}
+require('{{ wp_pre_config_filename }}');
+{% endif %}
+
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', '{{ wp_db_name }}');
@@ -103,6 +107,10 @@ define('WP_DEBUG', false);
 /** Absolute path to the WordPress directory. */
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
+
+{% if wp_post_config_filename is defined %}
+require('{{ wp_post_config_filename }}');
+{% endif %}
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
