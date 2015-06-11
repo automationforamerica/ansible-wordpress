@@ -112,6 +112,23 @@ if ( !defined('ABSPATH') )
 require('{{ wp_post_config_filename }}');
 {% endif %}
 
+
+
+/******************************************************************************************************************************************************************
+ FILE AND URL LOCATION CONSTANTS
+ ******************************************************************************************************************************************************************/
+! defined( 'ABSPATH' ) && define( 'ABSPATH', __DIR__ . '/' );
+define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+define( 'WP_CONTENT_URL', WP_SITEURL . '/wp-content' );
+define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+define( 'WP_PLUGIN_URL', WP_CONTENT_URL . '/plugins' );
+define( 'COOKIEPATH', preg_replace( '|https?://[^/]+|i', '', WP_HOME . '/' ) );
+define( 'SITECOOKIEPATH', preg_replace( '|https?://[^/]+|i', '', WP_SITEURL . '/' ) );
+define( 'ADMIN_COOKIE_PATH', SITECOOKIEPATH . 'wp-admin' );
+define( 'PLUGINS_COOKIE_PATH', preg_replace( '|https?://[^/]+|i', '', WP_PLUGIN_URL ) );
+define( 'COOKIE_DOMAIN', $_SERVER['HTTP_HOST'] );
+
+
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
 
