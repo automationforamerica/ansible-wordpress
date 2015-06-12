@@ -1,7 +1,4 @@
 ---
-- name: Restart varnish
-  service: name=varnish state=restarted
-  when: use_varnish
 
 # Need to use this manual form, as ansible 1.9.1 breaks when restarting php5-fpm
 - name: Restart php5-fpm
