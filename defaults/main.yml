@@ -22,8 +22,8 @@ secure_auth_salt:
 logged_in_salt:
 nonce_salt:
 
-wp_pre_config_filename: False
-wp_post_config_filename: False
+wp_pre_config_filename:
+wp_post_config_filename:
 
 nginx_sites:
   wordpress:
