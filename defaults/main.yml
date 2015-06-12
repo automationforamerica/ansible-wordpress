@@ -17,10 +17,12 @@ auth_key:
 secure_auth_key:
 logged_in_key:
 nonce_key:
+secret_key:
 auth_salt:
 secure_auth_salt:
 logged_in_salt:
 nonce_salt:
+secret_salt:
 
 wp_pre_config_filename:
 wp_post_config_filename:
