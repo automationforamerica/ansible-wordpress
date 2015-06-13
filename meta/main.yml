@@ -2,4 +2,4 @@
 dependencies:
   - role: ansible-role-mysql
   - role: ansible-role-nginx
-  - role: php-fpm
+  - role: ansible-php-fpm

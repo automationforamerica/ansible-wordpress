@@ -5,6 +5,7 @@ download_wordpress: False
 
 internal_dns_hostname_prefix: ""
 
+wp_db_host: example.com
 wp_db_name: wordpress
 wp_db_user: wordpress
 wp_db_password: secret
