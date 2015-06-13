@@ -6,24 +6,44 @@
     dest=/tmp/wordpress.tar.gz
     mode=get
 
+- name: Get the sha1 checksum of the tarball as the build number
+  stat: >
+    path=/tmp/wordpress.tar.gz
+    get_checksum=Yes
+  register: tarball
+
+- name: Create the target directory
+  file:
+    path: "{{ wp_deployment_directory }}{{ tarball.stat.checksum }}"
+    state: directory
+    mode: 0755
+    owner: "{{ replication_username }}"
+    group: "{{ replication_username }}"
+
 - name: Extract Wordpress
   unarchive: >
     src=/tmp/wordpress.tar.gz
-    dest="{{ wp_deployment_directory }}"
+    dest="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/"
     copy=no
 
 - name: Copy WordPress config file
   template:
     src: wp-config.php
-    dest: "{{ wp_deployment_directory }}"
+    dest: "{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/"
 
 - name: Change permissions on WordPress config file
   file: >
-    path="{{ wp_deployment_directory }}wp-config.php"
+    path="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/wp-config.php"
     owner="{{ replication_username }}"
+
+- name: Link the new build into place
+  file: >
+    src="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}"
+    dest="{{ wp_deployment_directory }}current"
+    state=link
 
 - name: Manually replicate Wordpress
   sudo_user: "{{ replication_username }}"
   sudo: Yes
-  shell: "scp -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}{{ wp_deployment_current_directory }} {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
+  shell: "scp -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}/* {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
   with_items: "{{ groups['tag_WordpressRole_Client'] }}"

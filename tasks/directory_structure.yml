@@ -1,14 +1,11 @@
 ---
 - name: WordPress | Make sure the target directories exist
   file:
-    path: "{{ item }}"
+    path: "{{ wp_deployment_directory_root }}"
     state: directory
     mode: 0755
     owner: "{{ replication_username }}"
     group: "{{ replication_username }}"
-  with_items:
-    - "{{ wp_deployment_directory_root }}"
-    - "{{ wp_deployment_directory_root }}{{ wp_deployment_current_directory }}"
 
 - name: Change ownership of WordPress installation
   file: >
