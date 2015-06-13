@@ -2,4 +2,4 @@
 dependencies:
   - role: geerlingguy.mysql
   - role: jdauphant.nginx
-  - role: https://github.com/automationforamerica/ansible-php-fpm
+  - role: nbz4live.php-fpm
