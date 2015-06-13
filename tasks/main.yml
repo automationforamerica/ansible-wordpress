@@ -1,9 +1,5 @@
 ---
 - include: ec2.yml
-# - include: security_groups.yml
-# - include: rds.yml
-  when: replicator
-# - include: elb.yml
 - include: directory_structure.yml
 - include: ssh.yml
 - include: replication.yml
@@ -11,5 +7,3 @@
 - include: deploy.yml
   when: replicator
 - include: restart.yml
-- include: elb_insert.yml
-  when: replicator != True

@@ -10,7 +10,6 @@ An opinionated Wordpress stack, featuring:
 ## Requirements
 
 - Ansible 1.9.1
-- boto
 - ansible-role-mysql
 - ansible-role-nginx
 - php-fpm
@@ -37,32 +36,13 @@ An opinionated Wordpress stack, featuring:
 
 ### VPC
 - `internal_network_cidr`: The CIDR denoting your internal network (those that can access `/wp-admin`)
-- `wp_vpc_id`: The VPC ID to launch instances, etc. in
-- `wp_network_subnets`: An array of subnet IDs in the VPC that the ELB will be assigned to.
-- `wp_network_subnet_group`: Subnet group that RDS instances will be assigned to.
 - `internal_dns_hostname_prefix`: Optional -- represents the DNS prefix (e.g. `www-` for machines in the form `www-001`)
 
-### Load Balancer
-- `wp_lb_name`: The name of the Internet-facing load balancer
-- `wp_lb_connection_draining_timeout`: Connection draining timeout
-
 ### Database
-- `wp_rds_instance_name`: Name of the RDS instance
-- `wp_rds_database_engine`: The engine powering the RDS instance. This should almost certainly be `MySQL`
-- `wp_db_size_in_gb`: Size of the database to be provisioned in GB.
-- `wp_rds_instance_type`: Instance type to run the RDS server on. Probably something like `m3.medium`.
+- `wp_db_host`: TODO
 - `wp_db_name`: Name of the database to provision
 - `wp_db_user`: Username to provision
 - `wp_db_password`: Password for the provisioned username
-- `wp_db_multi_zone`: `Yes` for a multi-AZ deployment. `No` otherwise.
-- `wp_db_backup_retention`: Number of days to retain automatic backups
-- `wp_db_publicaly_accessible`: `Yes` to make the database publically addressable on the Internet, `No` otherwise.
-- `wp_db_automatically_upgrade`: `Yes` to allow minor version upgrades on the RDS instance at any point, `No` otherwise.
-
-### Route 53
-- `fqdn_zone`: Hosted zone to register the ELB under.
-- `fqdn`: `fqdn_zone`, but with a leading `.`.
-- `wp_dns`: Subdomain of the FQDN to point to the ELB.
 
 ### Wordpress Configuration
 - `wp_pre_config_filename`: File to be included at the beginning of `wp-config.php`. Defaults to `False`.
