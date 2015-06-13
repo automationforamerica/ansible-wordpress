@@ -29,7 +29,7 @@ define('DB_USER', '{{ wp_db_user }}');
 define('DB_PASSWORD', '{{ wp_db_password }}');
 
 /** MySQL hostname */
-define('DB_HOST', '{{ wordpress_rds_facts.instance.endpoint }}');
+define('DB_HOST', '{{ wp_db_host }}');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
