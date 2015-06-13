@@ -1,5 +1,5 @@
 ---
 dependencies:
   - role: geerlingguy.mysql
-  - role: ansible-role-nginx
-  - role: ansible-php-fpm
+  - role: jdauphant.nginx
+  - role: https://github.com/automationforamerica/ansible-php-fpm
