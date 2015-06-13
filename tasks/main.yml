@@ -1,9 +1,9 @@
 ---
 - include: ec2.yml
-- include: security_groups.yml
-- include: rds.yml
+# - include: security_groups.yml
+# - include: rds.yml
   when: replicator
-- include: elb.yml
+# - include: elb.yml
 - include: directory_structure.yml
 - include: ssh.yml
 - include: replication.yml
