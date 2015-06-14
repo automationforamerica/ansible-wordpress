@@ -26,4 +26,4 @@
   sudo_user: "{{ replication_username }}"
   sudo: Yes
   shell: "scp -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}{{ wp_deployment_current_directory }} {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
-  with_items: "{{ groups['tag_Role_Wordpress'] }}"
+  with_items: "{{ groups['tag_WordpressRole_Client'] }}"
