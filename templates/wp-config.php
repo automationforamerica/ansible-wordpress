@@ -15,27 +15,41 @@
  */
 
 {% if wp_pre_config_filename is defined and wp_pre_config_filename != None %}
-require('{{ wp_pre_config_filename }}');
+require_once( '{{ wp_pre_config_filename }}' );
 {% endif %}
 
+
+
 // ** MySQL settings - You can get this info from your web host ** //
+/**
+ * WordPress Database Table prefix.
+ *
+ * You can have multiple installations in one database if you give each a unique
+ * prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix  = 'wp_';
+
 /** The name of the database for WordPress */
-define('DB_NAME', '{{ wp_db_name }}');
+define( 'DB_NAME', '{{ wp_db_name }}' );
 
 /** MySQL database username */
-define('DB_USER', '{{ wp_db_user }}');
+define( 'DB_USER', '{{ wp_db_user }}' );
 
 /** MySQL database password */
-define('DB_PASSWORD', '{{ wp_db_password }}');
+define( 'DB_PASSWORD', '{{ wp_db_password }}' );
 
 /** MySQL hostname */
-define('DB_HOST', '{{ wp_db_host }}');
+define( 'DB_HOST', '{{ wp_db_host }}' );
 
 /** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8');
+define( 'DB_CHARSET', 'utf8' );
 
 /** The Database Collate type. Don't change this if in doubt. */
-define('DB_COLLATE', '');
+define( 'DB_COLLATE', 'utf8_general_ci' );
+
+
+
+
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -46,80 +60,54 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
+define( 'AUTH_KEY',         '{{ auth_key }}' );
+define( 'SECURE_AUTH_KEY',  '{{ secure_auth_key }}' );
+define( 'LOGGED_IN_KEY',    '{{ logged_in_key }}' );
+define( 'NONCE_KEY',        '{{ nonce_key }}' );
+define( 'SECRET_KEY',       '{{ secret_key }}' );
+define( 'AUTH_SALT',        '{{ auth_salt }}' );
+define( 'SECURE_AUTH_SALT', '{{ secure_auth_salt }}' );
+define( 'LOGGED_IN_SALT',   '{{ logged_in_salt }}' );
+define( 'NONCE_SALT',       '{{ nonce_salt }}' );
+define( 'SECRET_SALT',      '{{ secret_salt }}' );
 
-define('AUTH_KEY',         '{{ auth_key }}');
-define('SECURE_AUTH_KEY',  '{{ secure_auth_key }}');
-define('LOGGED_IN_KEY',    '{{ logged_in_key }}');
-define('NONCE_KEY',        '{{ nonce_key }}');
-define('SECRET_KEY',       '{{ secret_key }}');
-define('AUTH_SALT',        '{{ auth_salt }}');
-define('SECURE_AUTH_SALT', '{{ secure_auth_salt }}');
-define('LOGGED_IN_SALT',   '{{ logged_in_salt }}');
-define('NONCE_SALT',       '{{ nonce_salt }}');
-define('SECRET_SALT',      '{{ secret_salt }}');
-
-/**
-
- * Other customizations.
-
- */
-
-define('FS_METHOD','direct');define('FS_CHMOD_DIR',0755);define('FS_CHMOD_FILE',0644);
-define('WP_TEMP_DIR',dirname(__FILE__).'/wp-content/uploads');
 
 /**
-
  * Turn off automatic updates since these are managed upstream.
-
  */
+{% if auto_up_disable is defined %}
+define( 'AUTOMATIC_UPDATER_DISABLED', {{auto_up_disable}} );
+{% endif %}
 
-define('AUTOMATIC_UPDATER_DISABLED', true);
 
-/**#@-*/
-
-/**
- * WordPress Database Table prefix.
- *
- * You can have multiple installations in one database if you give each a unique
- * prefix. Only numbers, letters, and underscores please!
- */
-$table_prefix  = 'wp_';
-
-/**
- * WordPress Localized Language, defaults to English.
- *
- * Change this to localize WordPress. A corresponding MO file for the chosen
- * language must be installed to wp-content/languages. For example, install
- * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
- * language support.
- */
-define('WPLANG', '');
-
-/**
- * For developers: WordPress debugging mode.
- *
- * Change this to true to enable the display of notices during development.
- * It is strongly recommended that plugin and theme developers use WP_DEBUG
- * in their development environments.
- */
-define('WP_DEBUG', false);
-
-/* That's all, stop editing! Happy blogging. */
-
-/** Absolute path to the WordPress directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
-
-{% if wp_post_config_filename is defined and wp_post_config_filename != None %}
-require('{{ wp_post_config_filename }}');
+/** Define AUTOMATIC Updates for Components. */
+{% if core_update_level is defined %}
+define( 'WP_AUTO_UPDATE_CORE', {{core_update_level}} );
 {% endif %}
 
 
 
-/******************************************************************************************************************************************************************
+
+
+
+/**#@-*/
+{% if wp_post_config_filename is defined and wp_post_config_filename != None %}
+require_once( '{{ wp_post_config_filename }}' );
+{% endif %}
+
+
+
+
+
+/**************************************************************************************************************************
  FILE AND URL LOCATION CONSTANTS
- ******************************************************************************************************************************************************************/
+ **************************************************************************************************************************/
+/** Absolute path to the WordPress directory. */
 ! defined( 'ABSPATH' ) && define( 'ABSPATH', __DIR__ . '/' );
+define( 'FS_METHOD', 'direct' );
+define( 'FS_CHMOD_DIR', 0755 );
+define( 'FS_CHMOD_FILE', 0644 );
+define( 'WP_TEMP_DIR', __DIR__ . '/wp-content/uploads' );
 define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
 define( 'WP_CONTENT_URL', WP_SITEURL . '/wp-content' );
 define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
@@ -131,11 +119,22 @@ define( 'PLUGINS_COOKIE_PATH', preg_replace( '|https?://[^/]+|i', '', WP_PLUGIN_
 define( 'COOKIE_DOMAIN', $_SERVER['HTTP_HOST'] );
 
 
+
+
 /** Sets up WordPress vars and included files. */
-require_once(ABSPATH . 'wp-settings.php');
+require_once( ABSPATH . 'wp-settings.php' );
 
-/** Disable Automatic Updates Completely */
-define( 'AUTOMATIC_UPDATER_DISABLED', {{auto_up_disable}} );
 
-/** Define AUTOMATIC Updates for Components. */
-define( 'WP_AUTO_UPDATE_CORE', {{core_update_level}} );
+
+
+/**************************************************************************************************************************
+ INCLUSIONS AFTER LOADING WP
+ **************************************************************************************************************************/
+if ( ( defined( 'ISC_DEBUG' ) && ISC_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+	ini_set( 'error_reporting', 2147483647 );
+}
+
+
+
+
+// EOF
