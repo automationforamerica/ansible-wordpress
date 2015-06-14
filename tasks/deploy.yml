@@ -35,6 +35,7 @@
   file: >
     path="{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}/wp-config.php"
     owner="{{ replication_username }}"
+    mode=644
 
 - name: Link the new build into place
   file: >
