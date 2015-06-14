@@ -14,7 +14,7 @@
  * @package WordPress
  */
 
-{% if wp_pre_config_filename is defined %}
+{% if wp_pre_config_filename is defined and wp_pre_config_filename != None %}
 require('{{ wp_pre_config_filename }}');
 {% endif %}
 
@@ -110,7 +110,7 @@ define('WP_DEBUG', false);
 if ( !defined('ABSPATH') )
 	define('ABSPATH', dirname(__FILE__) . '/');
 
-{% if wp_post_config_filename is defined %}
+{% if wp_post_config_filename is defined and wp_post_config_filename != None %}
 require('{{ wp_post_config_filename }}');
 {% endif %}
 
