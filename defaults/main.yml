@@ -28,6 +28,8 @@ secret_salt:
 wp_pre_config_filename:
 wp_post_config_filename:
 
+php_fpm_socket_location: /var/run/php-fpm/wordpress.sock
+
 nginx_sites:
   wordpress:
     - "listen *:{{ reverse_proxy_port }}"
@@ -44,7 +46,7 @@ nginx_sites:
         include fastcgi_params;
         fastcgi_index index.php;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass unix:/var/run/php-fpm/wordpress.sock;
+        fastcgi_pass unix:{{ php_fpm_socket_location }};
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
       }
     - location /wp-admin {
