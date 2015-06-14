@@ -1,5 +1,4 @@
 ---
-- include: ec2.yml
 - include: directory_structure.yml
 - include: ssh.yml
 - include: replication.yml
