@@ -14,7 +14,7 @@
 
 - name: Create the target directory
   file:
-    path: "{{ wp_deployment_directory }}{{ tarball.stat.checksum }}"
+    path: "{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}"
     state: directory
     mode: 0755
     owner: "{{ replication_username }}"
@@ -23,23 +23,23 @@
 - name: Extract Wordpress
   unarchive: >
     src=/tmp/wordpress.tar.gz
-    dest="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/"
+    dest="{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}/"
     copy=no
 
 - name: Copy WordPress config file
   template:
     src: wp-config.php
-    dest: "{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/"
+    dest: "{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}/"
 
 - name: Change permissions on WordPress config file
   file: >
-    path="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}/wp-config.php"
+    path="{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}/wp-config.php"
     owner="{{ replication_username }}"
 
 - name: Link the new build into place
   file: >
-    src="{{ wp_deployment_directory }}{{ tarball.stat.checksum }}"
-    dest="{{ wp_deployment_directory }}current"
+    src="{{ wp_deployment_directory_root }}{{ tarball.stat.checksum }}"
+    dest="{{ wp_deployment_directory_root }}current"
     state=link
 
 - name: Manually replicate Wordpress
