@@ -29,7 +29,7 @@
 - name: Copy WordPress config file
   template:
     src: wp-config.php
-    dest: "{{ wp_deployment_directory_root }}/{{ tarball.stat.checksum }}/"
+    dest: "{{ wp_releases_directory }}/{{ tarball.stat.checksum }}/"
 
 - name: Change permissions on WordPress config file
   file: >
