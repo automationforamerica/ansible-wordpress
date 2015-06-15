@@ -3,4 +3,4 @@ dependencies:
   - role: ANXS.generic-directories
   - role: geerlingguy.mysql
   - role: jdauphant.nginx
-  - role: nbz4live.php-fpm
+  - role: Jberlinsky.php-fpm
