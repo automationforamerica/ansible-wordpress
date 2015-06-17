@@ -1,4 +1,6 @@
 ---
+- name: Allow traffic on the reverse proxy port
+  ufw: rule=allow port={{ reverse_proxy_port }}
 - include: directory_structure.yml
 - include: ssh.yml
 - include: replication.yml
