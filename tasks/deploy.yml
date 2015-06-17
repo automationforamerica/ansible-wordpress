@@ -49,7 +49,7 @@
     state=directory
     owner="{{ replication_username }}"
     group=www-data
-    mode=775
+    mode=777 # TEMPORARY - need to use rsync to replicate to fix this
     recurse=Yes
 
 - name: Manually replicate Wordpress
