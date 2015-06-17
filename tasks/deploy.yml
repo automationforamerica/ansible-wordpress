@@ -42,6 +42,14 @@
     src="{{ wp_releases_directory }}{{ tarball.stat.checksum }}"
     dest="{{ wp_deployment_directory_root }}/current"
     state=link
+    
+- name: Change permissions on upload directory
+  file: >
+    path="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
+    state=directory
+    owner="{{ replication_username }}"
+    mode=755
+    recurse=Yes
 
 - name: Manually replicate Wordpress
   sudo_user: "{{ replication_username }}"
