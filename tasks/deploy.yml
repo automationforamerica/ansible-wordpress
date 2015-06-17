@@ -48,7 +48,8 @@
     path="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
     state=directory
     owner="{{ replication_username }}"
-    mode=755
+    group=www-data
+    mode=775
     recurse=Yes
 
 - name: Manually replicate Wordpress
