@@ -1,6 +1,11 @@
 ---
 - name: Allow traffic on the reverse proxy port
   ufw: rule=allow port={{ reverse_proxy_port }}
+- name: Stop Apache
+  service: name=apache2 state=stopped
+- name: Uninstall Apache if present
+  apt: name=apache2 state=absent
+  
 - include: directory_structure.yml
 - include: ssh.yml
 - include: replication.yml
