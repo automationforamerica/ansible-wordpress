@@ -86,11 +86,16 @@
     path="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
     state=absent
 
-- name: Link uploads directory
+- name: Copy uploads directory
+  shell: "cp -R {{ wp_deployment_directory_root }}shared/uploads {{ wp_deployment_directory_root }}current/wp-content/uploads"
+
+- name: Set permissions on uploads directory
   file: >
-    src="{{ wp_deployment_directory_root }}/shared/uploads"
-    dest="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
-    state=link
+    path="{{ wp_deployment_directory_root }}current/wp-content/uploads"
+    mode="777"
+    owner="{{ replication_username }}"
+    group="{{ replication_username }}"
+    recurse=Yes
 
 - name: Manually replicate Wordpress
   sudo_user: "{{ replication_username }}"
