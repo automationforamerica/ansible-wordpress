@@ -4,3 +4,4 @@ dependencies:
   - role: geerlingguy.mysql
   - role: jdauphant.nginx
   - role: nbz4live.php-fpm
+  - role: Jberlinsky.newrelic-php
