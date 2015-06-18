@@ -1,4 +1,28 @@
 ---
+- name: Create more permanent location for images
+  file: >
+    path="{{ wp_deployment_directory_root }}shared/uploads"
+    owner="{{ replication_username }}"
+    mode=777
+    state=directory
+
+- name: Check for an uploaded wp-content uploads folder
+  stat: >
+    path="{{ wp_deployment_directory_root }}current/wp-content/uploads/"
+  register: past_uploads
+
+- name: Move all images into a more permanent location
+  command: rsync -a {{ wp_deployment_directory_root }}current/wp-content/uploads/ {{ wp_deployment_directory_root }}shared/uploads/
+  when: past_uploads.stat.exists
+
+- name: Ensure that permissions are correct on shared uploads directory
+  file: >
+    path="{{ wp_deployment_directory_root }}shared/uploads"
+    owner="{{ replication_username }}"
+    mode=777
+    state=directory
+    recurse=Yes
+
 - name: Download latest Wordpress build
   s3: >
     bucket="{{ wp_deployment_bucket }}"
@@ -37,20 +61,36 @@
     owner="{{ replication_username }}"
     mode=644
 
+- name: Check for an uploaded wp-content uploads folder
+  stat: >
+    path="{{ wp_releases_directory }}{{ tarball.stat.checksum }}/wp-content/uploads/"
+  register: uploaded_uploads
+
+- name: Copy assets in wp-content to shared uploads folder
+  shell: "cp -R {{ wp_releases_directory }}{{ tarball.stat.checksum }}/wp-content/uploads/* {{ wp_deployment_directory_root }}shared/uploads/"
+  when: uploaded_uploads.stat.exists
+
+- name: Remove uploaded uploads folder
+  file: >
+    path="{{ wp_releases_directory }}{{ tarball.stat.checksum }}/wp-content/uploads/"
+    state=absent
+
 - name: Link the new build into place
   file: >
     src="{{ wp_releases_directory }}{{ tarball.stat.checksum }}"
     dest="{{ wp_deployment_directory_root }}/current"
     state=link
-    
-- name: Change permissions on upload directory
+
+- name: Remove uploads directory if it exists
   file: >
     path="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
-    state=directory
-    owner="{{ replication_username }}"
-    group=www-data
-    mode=777
-    recurse=Yes
+    state=absent
+
+- name: Link uploads directory
+  file: >
+    src="{{ wp_deployment_directory_root }}/shared/uploads"
+    dest="{{ wp_deployment_directory_root }}/current/wp-content/uploads"
+    state=link
 
 - name: Manually replicate Wordpress
   sudo_user: "{{ replication_username }}"
