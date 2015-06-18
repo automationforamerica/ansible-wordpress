@@ -96,9 +96,3 @@
     owner="{{ replication_username }}"
     group="{{ replication_username }}"
     recurse=Yes
-
-- name: Manually replicate Wordpress
-  sudo_user: "{{ replication_username }}"
-  sudo: Yes
-  shell: "scp -p -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}/* {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
-  with_items: "{{ groups['tag_WordpressRole_Client'] }}"
