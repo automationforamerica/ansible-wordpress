@@ -28,5 +28,5 @@
     name="Replicate Wordpress to {{ item }}"
     minute="*/3"
     hour="*"
-    job="scp -p -i ~/.ssh/wordpress_replication -r -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ wp_deployment_directory_root }}/* {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}/"
+    job="sudo su {{ replication_username }} -c \"rsync -aPz -v -e 'ssh -i /home/{{ replication_username }}/.ssh/wordpress_replication -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' {{ wp_deployment_directory_root }} {{ replication_username }}@{{ item }}:{{ wp_deployment_directory_root }}\""
   with_items: "{{ groups['tag_WordpressRole_Client'] }}"

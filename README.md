@@ -48,10 +48,6 @@ An opinionated Wordpress stack, featuring:
 - `wp_pre_config_filename`: File to be included at the beginning of `wp-config.php`. Defaults to `False`.
 - `wp_post_config_filename`: File to be included at the end of `wp-config.php`, right before requiring `wp-settings.php`. Defaults to `False`.
 
-## Required per-host variables
-
-- `replicator`: Whether the current machine is a Wordpress admin instance.
-
 ## Getting Started
 
 Spin up instances in EC2. The admin replicator should have a tag of Role=WordpressAdmin, and other machines should be tagged with Role=Wordpress. All machines must be named.

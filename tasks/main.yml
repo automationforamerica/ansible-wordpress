@@ -5,11 +5,8 @@
   service: name=apache2 state=stopped
 - name: Uninstall Apache if present
   apt: name=apache2 state=absent
-  
+
 - include: directory_structure.yml
 - include: ssh.yml
-- include: replication.yml
-  when: replicator
 - include: deploy.yml
-  when: replicator
 - include: restart.yml
